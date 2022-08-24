@@ -1,6 +1,6 @@
-import User from '##/models/User';
+import User from '../models/User';
 import bcrypt, { compareSync } from 'bcrypt';
-import Token from '##/service/TokenService';
+import Token from '../service/TokenService';
 
 class AuthController {
   async signin(req, res) {

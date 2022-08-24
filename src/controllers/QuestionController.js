@@ -1,5 +1,5 @@
-import Question from "##/models/Question";
-import Room from "##/models/Room";
+import Question from "../models/Question";
+import Room from "../models/Room";
 
 class QuestionController {
   async createQuestion(req, res) {

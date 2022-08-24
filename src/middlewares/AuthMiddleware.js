@@ -1,4 +1,4 @@
-import TokenService from "##/service/TokenService";
+import TokenService from "../service/TokenService";
 
 export default async (req, res, next) => {
 

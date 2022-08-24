@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import QuetionController from "##/controllers/QuestionController";
-import AuthMiddleware from "##/middlewares/AuthMiddleware";
+import QuetionController from "../controllers/QuestionController";
+import AuthMiddleware from "../middlewares/AuthMiddleware";
 const routes = Router();
 
 routes.get('/room/:_room', QuetionController.getQuestionsByRoom);

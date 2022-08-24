@@ -1,5 +1,5 @@
-import User from "##/models/User"
-import Token from '##/service/TokenService';
+import User from "../models/User"
+import Token from '../service/TokenService';
 
 class UserController {
   async createUser(req, res) {

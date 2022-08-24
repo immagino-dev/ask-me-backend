@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import RoomController from "##/controllers/RoomController";
-import AuthMiddleware from "##/middlewares/AuthMiddleware";
+import RoomController from "../controllers/RoomController";
+import AuthMiddleware from "../middlewares/AuthMiddleware";
 
 const routes = Router();
 

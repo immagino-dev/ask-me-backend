@@ -2,10 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import morgan from 'morgan';
 import { Server } from 'socket.io'
 import http from 'http';
 
-import routes from '##/routes';
+import routes from './routes';
 
 class App {
 
@@ -23,8 +24,9 @@ class App {
   }
 
   middlewares() {
-    this.app.use(cors());
+    this.app.use(cors("https://askme.immagino.dev/"));
     this.app.use(bodyParser.json());
+    this.app.use(morgan('tiny'));
     this.app.use((req, res, next) => {
       req.io = this.io;
       req.usersConnected = this.usersConnected;
@@ -41,9 +43,7 @@ class App {
       const { user, room } = socket.handshake.query;
       console.log(`User ${user} connected in room ${room}`);
       this.usersConnected[user] = socket.id;
-      
       socket.join(room);
-
       socket.on('disconnect', () => {
         console.log(`User ${user} desconnected`);
       });

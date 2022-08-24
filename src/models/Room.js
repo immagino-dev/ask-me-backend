@@ -1,4 +1,4 @@
-import mongoose from '##/database';
+import mongoose from '../database';
 
 
 const RoomSchema = new mongoose.Schema({
