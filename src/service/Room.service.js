@@ -4,7 +4,6 @@ import { ForbiddenError } from '../utils/Errors';
 
 class RoomService {
   async getRooms(_id) {
-    console.log(_id);
     const rooms = await Room.find({ user: _id }).populate(['user', 'questions']);
     return { rooms };
   }
@@ -24,6 +23,7 @@ class RoomService {
     return { room };
   }
   async updateRoom(title, opened, _room) {
+    console.log(_room);
     const room = await Room.findByIdAndUpdate(_room, { title, opened }, { new: true });
     return { room };
   }

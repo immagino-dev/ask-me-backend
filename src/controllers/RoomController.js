@@ -8,7 +8,6 @@ class RoomController {
     } catch (error) {
       next(error)
     }
-
   }
   async getRoom(req, res, next) {
     try {
@@ -38,8 +37,8 @@ class RoomController {
   async updateRoom(req, res, next) {
     const { title, opened } = req.body
     try {
-      const { room } = await RoomService.updateRoom(req.params._room, title, opened);
-
+      const { room } = await RoomService.updateRoom(title, opened, req.params._room);
+      console.log(room)
       if (!room.open) req.io.to(room._id.toString()).emit('closed', room);
 
       return res.status(200).json({ room });
