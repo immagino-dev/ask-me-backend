@@ -1,23 +1,13 @@
-import User from "../models/User"
-import Token from '../service/TokenService';
+import UserService from "../service/User.service";
 
 class UserController {
-  async createUser(req, res) {
-    const { email } = req.body
+  async createUser(req, res, next) {
     try {
-      if (await User.findOne({ email })) return res.status(400).json({ error: "User already exists" })
-      const user = await User.create(req.body);
-      user.password = undefined;
-      const token = await Token.generateToken({ _id: user._id, name: user.name });
+      const { user, token } = await UserService.createUser(req.body);
       return res.status(201).json({ user, token });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal server error" });
+      next(error)
     }
-  }
-
-  async update(req, res) {
-
   }
 }
 

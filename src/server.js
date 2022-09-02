@@ -8,6 +8,7 @@ import http from 'http';
 
 import routes from './routes';
 
+import ErrorMiddlaware from './middlewares/ErrorMiddlaware';
 class App {
 
   constructor() {
@@ -24,18 +25,19 @@ class App {
   }
 
   middlewares() {
-    this.app.use(cors("https://askme.immagino.dev/"));
+    this.app.use(cors());
     this.app.use(bodyParser.json());
     this.app.use(morgan('tiny'));
     this.app.use((req, res, next) => {
       req.io = this.io;
       req.usersConnected = this.usersConnected;
       return next();
-    })
+    });
   }
 
   routes() {
     this.app.use('/v1', routes)
+    this.app.use(ErrorMiddlaware);
   }
 
   connetionSocket() {

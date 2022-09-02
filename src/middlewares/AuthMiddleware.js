@@ -1,24 +1,30 @@
-import TokenService from "../service/TokenService";
+import AuthService from "../service/Auth.service";
+
+import { BadRequestError, UnauthorizedError } from '../utils/Errors';
 
 export default async (req, res, next) => {
 
-  const header = req.headers.authorization;
+  try {
+    const header = req.headers.authorization;
 
-  if (!header) return res.status(401).json({ error: "Token not provided" });
+    // if (!header) return res.status(401).json({ error: "Token not provided" });
+    if (!header) throw new BadRequestError('Token not provided');
 
-  const parts = header.split(" ");
+    const parts = header.split(" ");
 
-  if (!parts === 2) return res.status(401).json({ error: "Token error" });
+    if (!parts === 2) throw new BadRequestError('Token error');
 
-  const [scheme, token] = parts;
+    const [scheme, token] = parts;
 
-  if (!/^Bearer$/i.test(scheme)) return res.status(401).json({ error: "Token malformatted" });
+    if (!/^Bearer$/i.test(scheme)) throw new BadRequestError('Token malformatted');
 
-  const decoded = await TokenService.decodeToken(token);
+    const decoded = await AuthService.decodeToken(token);
 
-  if (!decoded) return res.status(401).json({ error: "Token invalid" });
+    if (!decoded) throw new UnauthorizedError('Token invalid');
+    req._id = decoded._id;
 
-  req._id = decoded._id;
-
-  return next()
+    return next()
+  } catch (error) {
+    return next(error)
+  }
 };

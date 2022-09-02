@@ -1,81 +1,70 @@
-import Question from "../models/Question";
-import Room from "../models/Room";
-
+import QuestionService from "../service/Question.service";
 class QuestionController {
-  async createQuestion(req, res) {
-    const { room } = req.body;
+  async createQuestion(req, res, next) {
+    const { room, question } = req.body;
     try {
-      const question = await Question.create({ question: req.body.question, user: req._id, room: room });
-      const roomUpdated = await Room.findByIdAndUpdate(room, { $push: { questions: question._id } }, { new: true }).populate([{ path: 'questions', populate: { path: 'user' }, options: { sort: { 'focus': -1, 'answered': 1, 'likes': -1 } } }]);
+      const { roomUpdated } = await QuestionService.createQuestion(question, room, req._id);
       req.io.to(room).emit('question', roomUpdated);
       return res.status(201).json({ roomUpdated });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal server error" });
+      next(error);
     }
   }
 
-  async getQuestions(req, res) {
+  async getQuestions(req, res, next) {
     try {
-      const questions = await Question.find();
+      const { questions } = await QuestionService.getQuestions();
       res.status(200).json({ questions });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal server error" });
+      next(error)
     }
   }
 
-  async getQuestionsByRoom(req, res) {
+  async getQuestionsByRoom(req, res, next) {
     try {
-      const room = await Room.findById(req.params._room).populate([{ path: 'questions', populate: { path: 'user' }, options: { sort: { 'focused': -1, 'answered': 1, 'likes': 1 } } }]);
+      const { room } = await QuestionService.getQuestionsByRoom(req.params._room);
       res.status(200).json({ room });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal server error" });
+      next(error)
     }
   }
-  async likeQuestion(req, res) {
+  async likeQuestion(req, res, next) {
     const { _question } = req.params;
     try {
-      const question = await Question.findByIdAndUpdate(_question, { $push: { likes: req._id } }, { new: true }).populate([{ path: 'user' }]);
-      console.log(question);
+      const question = await QuestionService.likeQuestion(_question);
       req.io.to(question.room.toString()).emit('like', question);
       res.status(200).json({ question });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal server error" });
+      next(error)
     }
   }
-  async answeredQuestion(req, res) {
+  async answeredQuestion(req, res, next) {
     const { _question } = req.params;
     try {
-      const question = await Question.findByIdAndUpdate(_question, { $set: { focused: false, answered: true } }, { new: true }).populate([{ path: 'user' }]);
+      const question = await QuestionService.answeredQuestion(_question);
       req.io.to(question.room.toString()).emit('answered', question);
       res.status(200).json({ question });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal server error" });
+      next(error)
     }
   }
-  async focusedQuestion(req, res) {
+  async focusedQuestion(req, res, next) {
     const { _question } = req.params;
     try {
-      const question = await Question.findByIdAndUpdate(_question, { $set: { focused: true } }, { new: true }).populate([{ path: 'user' }]);
+      const question = await QuestionService.focusedQuestion(_question);
       req.io.to(question.room.toString()).emit('focus', question);
       res.status(200).json({ question });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal server error" });
+      next(error)
     }
   }
-  async deleteQuestion(req, res) {
+  async deleteQuestion(req, res, next) {
     const { _question } = req.params;
     try {
-      const question = await Question.findByIdAndDelete(_question);
+      await QuestionService.deleteQuestion(_question);
       res.status(200).json({ message: 'Question deleted' });
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Internal server error" });
+      next(error)
     }
   }
 }

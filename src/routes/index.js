@@ -8,7 +8,6 @@ import AuthMiddleware from "../middlewares/AuthMiddleware";
 
 const routes = Router();
 
-
 routes.use('/auth', authRoutes);
 routes.use('/question', questionRoutes)
 routes.use('/room', roomRoutes);
