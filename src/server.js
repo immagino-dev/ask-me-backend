@@ -37,15 +37,12 @@ class App {
       return next();
     });
   }
-
   routes() {
     this.app.use('/v1', routes)
   }
-
   errorHandler() {
     this.app.use(ErrorMiddlaware);
   }
-
   connetionSocket() {
     this.io.on('connection', async (socket) => {
       const { user, room } = socket.handshake.query;
