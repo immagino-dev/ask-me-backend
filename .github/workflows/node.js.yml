@@ -37,5 +37,7 @@ jobs:
           cd ~/askme/
           git pull origin main
           git status
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
           npm install
           pm2 restart 0
