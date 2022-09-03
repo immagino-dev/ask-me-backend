@@ -15,8 +15,8 @@ class QuestionService {
     const room = await Room.findById(_room).populate([{ path: 'questions', populate: { path: 'user' }, options: { sort: { 'focused': -1, 'answered': 1, 'likes': 1 } } }]);
     return { room }
   }
-  async likeQuestion(_question) {
-    const question = await Question.findByIdAndUpdate(_question, { $push: { likes: req._id } }, { new: true }).populate([{ path: 'user' }]);
+  async likeQuestion(_question, _id) {
+    const question = await Question.findByIdAndUpdate(_question, { $push: { likes: _id } }, { new: true }).populate([{ path: 'user' }]);
     return { question };
   }
   async answeredQuestion(_question) {

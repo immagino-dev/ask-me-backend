@@ -31,7 +31,7 @@ class QuestionController {
   async likeQuestion(req, res, next) {
     const { _question } = req.params;
     try {
-      const question = await QuestionService.likeQuestion(_question);
+      const { question } = await QuestionService.likeQuestion(_question, req._id);
       req.io.to(question.room.toString()).emit('like', question);
       res.status(200).json({ question });
     } catch (error) {
@@ -41,7 +41,7 @@ class QuestionController {
   async answeredQuestion(req, res, next) {
     const { _question } = req.params;
     try {
-      const question = await QuestionService.answeredQuestion(_question);
+      const { question } = await QuestionService.answeredQuestion(_question);
       req.io.to(question.room.toString()).emit('answered', question);
       res.status(200).json({ question });
     } catch (error) {
@@ -51,7 +51,7 @@ class QuestionController {
   async focusedQuestion(req, res, next) {
     const { _question } = req.params;
     try {
-      const question = await QuestionService.focusedQuestion(_question);
+      const { question } = await QuestionService.focusedQuestion(_question);
       req.io.to(question.room.toString()).emit('focus', question);
       res.status(200).json({ question });
     } catch (error) {
