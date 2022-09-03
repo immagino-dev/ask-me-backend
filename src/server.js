@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
+import helmet from 'helmet';
 import { Server } from 'socket.io'
 import http from 'http';
 
@@ -21,12 +22,14 @@ class App {
     this.connetionSocket();
     this.middlewares();
     this.routes();
+    this.errorHandler();
     this.connectDB();
   }
 
   middlewares() {
     this.app.use(cors());
     this.app.use(bodyParser.json());
+    this.app.use(helmet());
     this.app.use(morgan('tiny'));
     this.app.use((req, res, next) => {
       req.io = this.io;
@@ -37,6 +40,9 @@ class App {
 
   routes() {
     this.app.use('/v1', routes)
+  }
+
+  errorHandler() {
     this.app.use(ErrorMiddlaware);
   }
 
