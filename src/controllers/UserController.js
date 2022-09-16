@@ -6,7 +6,7 @@ class UserController {
       const { user, token } = await UserService.createUser(req.body);
       return res.status(201).json({ user, token });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }
