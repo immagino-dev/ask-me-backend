@@ -34,4 +34,4 @@ jobs:
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
           npm install
-          pm2 restart 1 --update-env
+          pm2 restart 3 --update-env
