@@ -1,4 +1,4 @@
-import RoomService from "../service/Room.service";
+import RoomService from "../services/Room.service";
 
 class RoomController {
   async getRooms(req, res, next) {

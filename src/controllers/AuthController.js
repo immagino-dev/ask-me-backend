@@ -1,4 +1,4 @@
-import AuthService from '../service/Auth.service';
+import AuthService from '../services/Auth.service';
 class AuthController {
   async signin(req, res, next) {
     const { email, password } = req.body;

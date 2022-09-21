@@ -1,4 +1,4 @@
-import QuestionService from "../service/Question.service";
+import QuestionService from "../services/Question.service";
 class QuestionController {
   async createQuestion(req, res, next) {
     const { room, question } = req.body;
